@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arthur — Desenvolvimento Web</title>
+<meta name="description" content="Sites, landing pages e sistemas sob medida — do comércio de bairro à gestão hospitalar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#171d2c;
+    --ink-soft:#4d5468;
+    --paper:#f6f4ee;
+    --panel:#ffffff;
+    --line:#e3e0d4;
+    --line-strong:#cfccbd;
+    --forest:#2f4d3a;
+    --forest-deep:#1e3226;
+    --forest-soft:#e7ede8;
+    --gold:#a9822f;
+    --gold-soft:#f1e8d2;
+    --night:#12182a;
+    --night-soft:#1b2338;
+    --star:#e8dcb8;
+    --font-display:'Fraunces', Georgia, serif;
+    --font-body:'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --radius:5px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--font-body);line-height:1.6;font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  img{max-width:100%;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+  @media (max-width:640px){ .wrap{padding:0 20px;} }
+
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+  /* ---- nav ---- */
+  .nav{
+    position:sticky;top:0;z-index:20;background:rgba(246,244,238,.92);backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:16px;padding-bottom:16px;}
+  .wordmark{
+    font-family:var(--font-display);font-weight:600;font-size:19px;text-decoration:none;color:var(--ink);
+    letter-spacing:.01em;
+  }
+  .nav-links{display:flex;align-items:center;gap:26px;}
+  .nav-links a{
+    font-size:14px;font-weight:500;text-decoration:none;color:var(--ink-soft);
+    border-bottom:1px solid transparent;padding-bottom:2px;transition:color .15s,border-color .15s;
+  }
+  .nav-links a:hover{color:var(--ink);border-color:var(--line-strong);}
+  .nav-links a.nav-cta{color:var(--forest-deep);font-weight:600;}
+  .nav-links a.nav-cta:hover{border-color:var(--forest-deep);}
+  @media (max-width:560px){ .nav-links{gap:14px;} .nav-links a:not(.nav-cta){display:none;} }
+
+  /* ---- hero (night sky) ---- */
+  .hero{position:relative;background:var(--night);color:var(--star);overflow:hidden;}
+  .hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .hero-inner{position:relative;padding:96px 0 88px;}
+  @media (max-width:640px){ .hero-inner{padding:64px 0 60px;} }
+  .kicker{
+    font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--gold);margin:0 0 18px;
+  }
+  .hero h1{
+    font-family:var(--font-display);font-weight:600;font-size:clamp(32px,5.6vw,54px);
+    line-height:1.08;letter-spacing:-.01em;margin:0 0 20px;max-width:16ch;
+    color:#f4efe0;text-wrap:balance;
+  }
+  .hero-sub{font-size:17px;color:#c7c9d6;max-width:46ch;margin:0 0 34px;}
+  .hero-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
+
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 22px;border-radius:var(--radius);border:1px solid transparent;
+    background:var(--gold);color:var(--night);
+    font-family:var(--font-body);font-weight:600;font-size:14.5px;
+    text-decoration:none;transition:background .15s,transform .1s;
+  }
+  .btn:hover{background:#c39a42;}
+  .btn:active{transform:scale(.98);}
+  .btn.btn-forest{background:var(--forest-deep);color:#fff;}
+  .btn.btn-forest:hover{background:var(--forest);}
+
+  .link-quiet{
+    font-size:14px;color:#aeb2c4;text-decoration:none;
+    border-bottom:1px solid rgba(174,178,196,.4);padding-bottom:2px;
+    transition:color .15s,border-color .15s;
+  }
+  .link-quiet:hover{color:#f4efe0;border-color:#f4efe0;}
+
+  /* ---- generic sections ---- */
+  section{padding:76px 0;}
+  @media (max-width:640px){ section{padding:52px 0;} }
+  .section-kicker{
+    font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--forest-deep);margin:0 0 12px;
+  }
+  .section-title{
+    font-family:var(--font-display);font-weight:600;font-size:clamp(24px,3.4vw,32px);
+    margin:0 0 40px;color:var(--ink);max-width:26ch;text-wrap:balance;
+  }
+
+  /* ---- services ---- */
+  .services{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .service-grid{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;grid-template-columns:repeat(3,1fr);}
+  @media (max-width:800px){ .service-grid{grid-template-columns:1fr;} }
+  .service-card{background:var(--panel);padding:30px 28px;}
+  .service-card .mark{
+    width:30px;height:30px;border-radius:50%;border:1.5px solid var(--forest);
+    display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+    font-family:var(--font-display);font-style:italic;font-size:15px;color:var(--forest);
+  }
+  .service-card h3{font-family:var(--font-display);font-weight:600;font-size:18.5px;margin:0 0 10px;color:var(--ink);}
+  .service-card p{font-size:14.5px;color:var(--ink-soft);margin:0;}
+  .service-card .who{
+    display:block;margin-top:14px;font-size:12.5px;color:var(--forest-deep);font-weight:600;
+  }
+
+  /* ---- work / proof ---- */
+  .work-grid{display:flex;flex-direction:column;gap:0;}
+  .work-item{
+    display:grid;grid-template-columns:200px 1fr;gap:28px;
+    padding:30px 0;border-top:1px solid var(--line);
+  }
+  .work-item:last-child{border-bottom:1px solid var(--line);}
+  @media (max-width:680px){ .work-item{grid-template-columns:1fr;gap:10px;} }
+  .work-item .label{font-family:var(--font-display);font-size:16px;font-weight:500;font-style:italic;color:var(--ink-soft);}
+  .work-item h3{font-family:var(--font-display);font-weight:600;font-size:20px;margin:0 0 8px;color:var(--ink);}
+  .work-item p{font-size:14.5px;color:var(--ink-soft);margin:0 0 12px;max-width:56ch;}
+  .work-item .tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;}
+  .work-item .tags span{
+    font-size:11.5px;font-weight:600;color:var(--forest-deep);background:var(--forest-soft);
+    padding:3px 9px;border-radius:999px;
+  }
+  .work-item .status{
+    display:inline-block;font-size:11.5px;font-weight:600;color:var(--gold);
+    background:var(--gold-soft);padding:3px 9px;border-radius:999px;margin-bottom:10px;
+  }
+  .work-item a.visit{display:inline-block;margin-right:16px;font-size:13.5px;font-weight:600;color:var(--forest-deep);text-decoration:none;border-bottom:1px solid var(--forest-deep);}
+  .work-item a.visit:hover{color:var(--forest);border-color:var(--forest);}
+
+  /* ---- process ---- */
+  .process{background:var(--forest-deep);color:#eef1ec;}
+  .process .section-kicker{color:var(--gold);}
+  .process .section-title{color:#fff;}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;}
+  @media (max-width:800px){ .steps{grid-template-columns:1fr 1fr;} }
+  @media (max-width:480px){ .steps{grid-template-columns:1fr;} }
+  .step .n{font-family:var(--font-display);font-style:italic;font-size:26px;color:var(--gold);margin-bottom:10px;}
+  .step h4{font-size:15.5px;font-weight:700;margin:0 0 8px;color:#fff;}
+  .step p{font-size:13.5px;color:#c9d1c9;margin:0;}
+
+  /* ---- about ---- */
+  .about .wrap{max-width:680px;}
+  .about p{font-size:17px;color:var(--ink-soft);margin:0 0 16px;line-height:1.7;}
+  .about p b{color:var(--ink);font-weight:600;}
+  .about .signoff{
+    font-family:var(--font-display);font-style:italic;font-size:19px;color:var(--ink);margin-top:26px;
+  }
+
+  /* ---- footer / contact ---- */
+  footer{background:var(--night);color:#e8e6dc;padding:80px 0 40px;}
+  footer .cta-block{text-align:left;max-width:520px;}
+  footer h2{
+    font-family:var(--font-display);font-weight:600;font-size:clamp(26px,4vw,36px);
+    margin:0 0 22px;color:#f4efe0;text-wrap:balance;
+  }
+  footer .footer-links{
+    margin-top:56px;padding-top:24px;border-top:1px solid rgba(232,230,220,.15);
+    display:flex;flex-wrap:wrap;gap:24px;font-size:13.5px;
+  }
+  footer .footer-links a{color:#aeb2c4;text-decoration:none;}
+  footer .footer-links a:hover{color:#f4efe0;}
+  footer .fine{margin-top:18px;font-size:12px;color:#767b8f;}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="wordmark" href="#top">Arthur</a>
+    <nav class="nav-links">
+      <a href="#trabalhos">Trabalhos</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#sobre">Sobre</a>
+      <a class="nav-cta" href="https://briefing-projeto-one.vercel.app">Contar sobre o projeto</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
+    <p class="kicker">Desenvolvimento sob medida</p>
+    <h1>Do site da sua academia ao sistema de um hospital.</h1>
+    <p class="hero-sub">Sites, landing pages e sistemas sob medida, com a mesma atenção do primeiro projeto ao mais complexo.</p>
+    <div class="hero-actions">
+      <a class="btn" href="https://briefing-projeto-one.vercel.app">Contar sobre o seu projeto</a>
+      <a class="link-quiet" href="#trabalhos">ver trabalhos ↓</a>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="servicos">
+  <div class="wrap">
+    <p class="section-kicker">O que eu construo</p>
+    <h2 class="section-title">O tamanho muda de projeto pra projeto — o cuidado, não</h2>
+  </div>
+  <div class="wrap">
+    <div class="service-grid">
+      <article class="service-card">
+        <div class="mark">1</div>
+        <h3>Presença digital</h3>
+        <p>Site institucional ou landing page — a porta de entrada que faz um negócio já bom parecer tão profissional quanto é.</p>
+        <span class="who">Comércio local · academias · personal trainers · nutricionistas · escritórios de contabilidade</span>
+      </article>
+      <article class="service-card">
+        <div class="mark">2</div>
+        <h3>Sistemas sob medida</h3>
+        <p>Uma ferramenta enxuta para organizar o que hoje ainda vive em planilha, caderno ou grupo de WhatsApp.</p>
+        <span class="who">Agenda, estoque, controle financeiro, cadastro de cliente</span>
+      </article>
+      <article class="service-card">
+        <div class="mark">3</div>
+        <h3>Plataformas institucionais</h3>
+        <p>Sistemas multi-tenant e de missão crítica, para operações com múltiplas unidades e dado sensível.</p>
+        <span class="who">Saúde institucional · operações com várias unidades</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="work" id="trabalhos">
+  <div class="wrap">
+    <p class="section-kicker">Provas, não promessas</p>
+    <h2 class="section-title">O que já está no ar, e o que está sendo construído</h2>
+    <div class="work-grid">
+
+      <div class="work-item">
+        <div class="label">Finanças pessoais</div>
+        <div>
+          <h3>Capi</h3>
+          <p>PWA de finanças pessoais com assistentes de IA para lançar receita e despesa por voz, dashboard, carteiras, cartões, investimentos e metas — todos os módulos do menu implementados e em produção.</p>
+          <div class="tags"><span>React</span><span>TypeScript</span><span>Supabase</span><span>PWA</span></div>
+          <a class="visit" href="https://capi-financas.vercel.app">Ver em funcionamento →</a>
+        </div>
+      </div>
+
+      <div class="work-item">
+        <div class="label">Landing page</div>
+        <div>
+          <h3>PL Ambiental Consultoria</h3>
+          <p>Site institucional para uma consultoria ambiental: licenciamento, CAR/PRA, PRAD, monitoramento por satélite e o ciclo completo de gestão de resíduos explicado passo a passo para o cliente final.</p>
+          <div class="tags"><span>HTML/CSS</span><span>GitHub Pages</span></div>
+          <a class="visit" href="https://odlaoraugusto.github.io/PL_AMBIENTAL/">Ver em funcionamento →</a>
+        </div>
+      </div>
+
+      <div class="work-item">
+        <div class="label">Saúde institucional</div>
+        <div>
+          <span class="status">Em desenvolvimento</span>
+          <h3>Sistemas para operação hospitalar</h3>
+          <p>Três sistemas autorais, cada um resolvendo um problema real de gestão em saúde: controle de estoque com FEFO e fluxo de aprovação para descarte, gestão multi-tenant de agências transfusionais com dado de paciente criptografado, e acompanhamento de controle de infecção hospitalar. O código do estoque de farmácia e do MicroGest já está aberto no GitHub; o de agências transfusionais fica privado por lidar com dado de paciente.</p>
+          <div class="tags"><span>FastAPI</span><span>PostgreSQL</span><span>Multi-tenant</span><span>Dado sensível</span></div>
+          <a class="visit" href="https://github.com/odlaoraugusto/microgest">MicroGest no GitHub →</a>
+          <a class="visit" href="https://github.com/odlaoraugusto/estoque-farmacia">Estoque de farmácia no GitHub →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="process" id="como-funciona">
+  <div class="wrap">
+    <p class="section-kicker">Como funciona</p>
+    <h2 class="section-title">Quatro etapas, sem surpresa no meio do caminho</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">i.</div>
+        <h4>Briefing</h4>
+        <p>Você conta sobre o negócio, o objetivo e o que já existe — por um formulário estruturado ou numa conversa por chamada, como preferir. Nem todo mundo se dá bem preenchendo formulário sozinho, e tudo bem.</p>
+      </div>
+      <div class="step">
+        <div class="n">ii.</div>
+        <h4>Proposta</h4>
+        <p>Escopo, prazo e forma de pagamento por escrito, antes de qualquer linha de código.</p>
+      </div>
+      <div class="step">
+        <div class="n">iii.</div>
+        <h4>Desenvolvimento</h4>
+        <p>Checkpoints combinados com antecedência — você sabe em que ponto o projeto está sem precisar perguntar.</p>
+      </div>
+      <div class="step">
+        <div class="n">iv.</div>
+        <h4>Entrega</h4>
+        <p>Revisões já previstas na proposta, e um combinado claro sobre manutenção depois que o projeto vai ao ar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="sobre">
+  <div class="wrap">
+    <p class="section-kicker">Quem constrói</p>
+    <h2 class="section-title">Quem conversa com você é quem escreve o código</h2>
+    <p>Aqui, quem desenvolve o projeto também escreve a proposta, acompanha o prazo e responde sua mensagem. Boa parte dos projetos autorais nasce de um problema real de gestão em saúde — hemoterapia, controle de infecção hospitalar, estoque de farmácia — mas o mesmo cuidado vale para o site de uma academia de bairro ou o sistema interno de um escritório de contabilidade.</p>
+    <p>A identidade visual deste site segue o mesmo princípio da ferramenta de briefing: nada de gradiente ou de card genérico prometendo <b>"solução inovadora"</b> — só clareza sobre o que está sendo entregue, prazo cumprido e um sistema que funciona desde o primeiro dia.</p>
+    <p class="signoff">— Arthur</p>
+  </div>
+</section>
+
+<footer id="contato">
+  <div class="wrap">
+    <div class="cta-block">
+      <p class="kicker">Vamos começar?</p>
+      <h2>Manda uma mensagem ou clica aqui embaixo e conta um pouco sobre o que você precisa resolver.</h2>
+      <a class="btn btn-forest" href="https://briefing-projeto-one.vercel.app">Preencher o briefing</a>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:odlaor.augusto@gmail.com">odlaor.augusto@gmail.com</a>
+      <a href="https://github.com/odlaoraugusto">github.com/odlaoraugusto</a>
+    </div>
+    <p class="fine">Arthur — Desenvolvimento Web</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var canvas = document.getElementById('sky');
+  if(!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stars = [];
+  var w = 0, h = 0, dpr = 1;
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.clientWidth;
+    h = canvas.clientHeight;
+    canvas.width = Math.max(1, Math.round(w * dpr));
+    canvas.height = Math.max(1, Math.round(h * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function initStars(){
+    var count = Math.max(24, Math.floor((w * h) / 9000));
+    stars = [];
+    for (var i = 0; i < count; i++){
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.3 + 0.4,
+        vx: (Math.random() - 0.5) * 0.05,
+        vy: (Math.random() - 0.5) * 0.05,
+        tw: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function frame(){
+    ctx.clearRect(0, 0, w, h);
+    for (var i = 0; i < stars.length; i++){
+      var s = stars[i];
+      if (!reduceMotion){
+        s.x += s.vx; s.y += s.vy; s.tw += 0.015;
+        if (s.x < 0) s.x = w; if (s.x > w) s.x = 0;
+        if (s.y < 0) s.y = h; if (s.y > h) s.y = 0;
+      }
+      var alpha = reduceMotion ? 0.45 : (0.35 + Math.sin(s.tw) * 0.25);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(232,220,184,' + Math.max(alpha, 0.15) + ')';
+      ctx.fill();
+    }
+    for (var a = 0; a < stars.length; a++){
+      for (var b = a + 1; b < stars.length; b++){
+        var s1 = stars[a], s2 = stars[b];
+        var dx = s1.x - s2.x, dy = s1.y - s2.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 85){
+          ctx.beginPath();
+          ctx.moveTo(s1.x, s1.y);
+          ctx.lineTo(s2.x, s2.y);
+          ctx.strokeStyle = 'rgba(169,130,47,' + (0.14 * (1 - dist / 85)) + ')';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+    if (!reduceMotion) requestAnimationFrame(frame);
+  }
+
+  function start(){
+    resize();
+    initStars();
+    frame();
+  }
+
+  var resizeTimer;
+  window.addEventListener('resize', function(){
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function(){
+      resize(); initStars(); if (reduceMotion) frame();
+    }, 150);
+  });
+
+  start();
+})();
+</script>
+
+</body>
+</html>
